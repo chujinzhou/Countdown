@@ -1,0 +1,24 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppBaseTheme" parent="Theme.Holo.Mine"></style>
+    <style name="AppTheme" parent="AppBaseTheme"></style>
+    
+    <style name="Theme.Holo.Mine" parent="android:style/Theme.Holo.Light">
+        <item name="android:displayOptions">showCustom</item>
+        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>
+    </style>
+    
+    <style name="MyActionBarStyle" parent="android:style/Widget.ActionBar">  
+        <item name="android:background">#00000000</item>
+        <item name="android:titleTextStyle">@style/ShadowText_ActionBar</item>
+    </style>
+    
+    <style name="ShadowText_ActionBar" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:shadowColor">#4d4d4d</item>
+        <item name="android:shadowRadius">10</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+    </style>
+    
+</resources>
