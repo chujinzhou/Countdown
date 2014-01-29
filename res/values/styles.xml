@@ -1,24 +1,29 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <style name="AppBaseTheme" parent="Theme.Holo.Mine"></style>
-    <style name="AppTheme" parent="AppBaseTheme"></style>
+    
+    <style name="AppTheme">@style/Theme.Holo.BlueActionBar</style>
     
     <style name="Theme.Holo.Mine" parent="android:style/Theme.Holo.Light">
         <item name="android:displayOptions">showCustom</item>
-        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/TranspartActionBarStyle</item>
     </style>
     
-    <style name="MyActionBarStyle" parent="android:style/Widget.ActionBar">  
+    <style name="Theme.Holo.BlueActionBar" parent="android:style/Theme.Holo.Light">
+        <item name="android:displayOptions">showCustom</item>
+        <item name="android:actionBarStyle">@style/BlueActionBarStyle</item>
+    </style>
+    
+    <style name="BlueActionBarStyle" parent="android:style/Widget.ActionBar">  
+        <item name="android:background">@android:color/holo_blue_bright</item>
+        <item name="android:titleTextStyle">@style/WhiteText_ActionBar</item>
+    </style>
+    
+    <style name="TranspartActionBarStyle" parent="android:style/Widget.ActionBar">  
         <item name="android:background">#00000000</item>
-        <item name="android:titleTextStyle">@style/ShadowText_ActionBar</item>
+        <item name="android:titleTextStyle">@style/WhiteText_ActionBar</item>
     </style>
     
-    <style name="ShadowText_ActionBar" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:shadowColor">#4d4d4d</item>
-        <item name="android:shadowRadius">10</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">0</item>
+    <style name="WhiteText_ActionBar" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
     </style>
     
 </resources>

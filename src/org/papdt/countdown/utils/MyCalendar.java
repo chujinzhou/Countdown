@@ -47,6 +47,48 @@ public class MyCalendar {
 		return l.toString();
 	}
 	
+	public static String format(String source, boolean isLunar){
+		//TODO 完善农历倒计时机制
+		refreshTime();
+		if (source.length() == 2){
+			if (c.get(Calendar.DAY_OF_MONTH) <= Integer.parseInt(source)){
+				return c.get(Calendar.YEAR)
+						+ "-" + (c.get(Calendar.MONTH) + 1)
+						+ "-" + Integer.parseInt(source);
+			} else {
+				if (c.get(Calendar.MONTH) != 11){
+					return c.get(Calendar.YEAR)
+							+ "-" + (c.get(Calendar.MONTH) + 2)
+							+ "-" + Integer.parseInt(source);
+				} else {
+					return (c.get(Calendar.YEAR) + 1)
+							+ "-01"
+							+ "-" + Integer.parseInt(source);
+				}
+			}
+		}
+		
+		if (source.length() == 5){
+			if ((c.get(Calendar.MONTH) + 1) == Integer.parseInt(source.substring(0, 1))){
+				return c.get(Calendar.YEAR) + "-" + source;
+			}
+			
+			if ((c.get(Calendar.MONTH) + 1) == Integer.parseInt(source.substring(0, 1))){
+				if (c.get(Calendar.DAY_OF_MONTH) <= Integer.parseInt(source.substring(3, 4))){
+					return c.get(Calendar.YEAR) + "-" + source;
+				} else {
+					return (c.get(Calendar.YEAR) + 1) + "-" + source;
+				}
+			}
+			
+			if ((c.get(Calendar.MONTH) + 1) > Integer.parseInt(source.substring(0, 1))){
+				return (c.get(Calendar.YEAR) + 1) + "-" + source;
+			}
+		}
+		
+		return source;
+	}
+	
 	public static long countdown(Date d, int field){
 		refreshTime();
 		
@@ -84,4 +126,5 @@ public class MyCalendar {
 				SECOND=5,
 				MILESECOND=6;
 	}
+	
 }

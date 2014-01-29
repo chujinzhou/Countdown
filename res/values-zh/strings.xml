@@ -4,5 +4,35 @@
     <string name="app_name">倒计时</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="menu_add">新增</string>
+    <string name="menu_finish">完成</string>
+    <string name="menu_share">分享</string>
+    <string name="menu_about">关于</string>
+    <string name="toast_add">添加成功</string>
+    <string name="hint_title">标题</string>
+    <string name="hint_entertitle">你好像忘记输入标题了</string>
+    <string name="set_date">设置日期</string>
+    <string-array name="date_type">
+        <item>当天</item>
+        <item>每年</item>
+        <item>每月</item>
+    </string-array>
+    <string-array name="month_name">
+        <item>一月</item>
+        <item>二月</item>
+        <item>三月</item>
+        <item>四月</item>
+        <item>五月</item>
+        <item>六月</item>
+        <item>七月</item>
+        <item>八月</item>
+        <item>九月</item>
+        <item>十月</item>
+        <item>十一月</item>
+        <item>十二月</item>
+    </string-array>
+    <string name="sharetext">"我正在使用“倒计时”应用by.fython，你也来试一试吧。地址: http://github.com/fython/Countdown"</string>
+    <string name="abouttext">"倒计时 1.0 Beta\n为中国Android用户设计\n\n作者: Fython (fython@163.com)\n新浪微博:@fython\n\n纸飞机工作室出品 2014."</string>
+    
+        
 </resources>
