@@ -32,6 +32,12 @@
         <item>December</item>
     </string-array>
     <string name="sharetext">"I'm using Countdown App made by fython. Link: http://github.com/fython/Countdown"</string>
-    <string name="abouttext">"Countdown 1.0 Beta\nDesign for Chinese Android users\n\nAuthor: Fython (fython@163.com)\nSinaWeibo:@fython\n\nPaperAirplane 2014."</string>
+    <string name="abouttext">"Countdown 1.0 Beta\nDesign for Chinese Android users\nGithub: http://github.com/fython/Countdown\n\nAuthor: Fython (fython@163.com)\nSinaWeibo:@fython\n\nPaperAirplane 2014."</string>
 
+    <string-array name="tips">
+        <item>Swipe cards to clean!</item>
+        <item>Project website: http://github.com/fython/Countdown</item>
+        <item>I need someone who can help me with this.</item>
+    </string-array>
+    
 </resources>

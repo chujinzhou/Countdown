@@ -197,7 +197,7 @@ public class ActivityAdd extends Activity{
                 public void onClick(DialogInterface dialog, int whichButton) {
                         switch (whichButton) {
                         case DialogInterface.BUTTON_POSITIVE:
-                        	String day = String.valueOf(s2.getSelectedItemId());
+                        	String day = String.valueOf(s2.getSelectedItemId() + 1);
                         	btn_date.setText(day.length() == 1 ? "0" + day : day);
                         	break;
                         case DialogInterface.BUTTON_NEGATIVE:

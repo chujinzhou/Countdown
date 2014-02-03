@@ -15,8 +15,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,6 +58,7 @@ public class ActivityMain extends Activity {
 				break;
 			case 3:
 				Handler handler0 = new Handler();
+				cardui.clearCards();
 				handler0.post(refreshThread);
 				break;
 			}
@@ -83,7 +86,6 @@ public class ActivityMain extends Activity {
 			Message msg;
 			Bundle bundle;
 
-			cardui.clearCards();
 			db = DatabaseHelper.getDatabase();
 			
 			for (int i=0;i<db.getSize();i++){
@@ -140,6 +142,20 @@ public class ActivityMain extends Activity {
 	private void initCard(){
 		cardui = (CardUI) findViewById(R.id.cardlist);
 		cardui.setSwipeable(true);
+		
+		SharedPreferences preferences = getApplicationContext().getSharedPreferences("default", Context.MODE_PRIVATE);
+		//if (!preferences.getBoolean("hasFirstStarted", false)) {
+			String[] tipArray = getResources().getStringArray(R.array.tips);
+			TextCard tip0 = new TextCard(tipArray[0]);
+			TextCard tip1 = new TextCard(tipArray[1]);
+			TextCard tip2 = new TextCard(tipArray[2]);
+			
+			cardui.addCard(tip0, true);
+			cardui.addCard(tip1, true);
+			cardui.addCard(tip2, true);
+			
+			preferences.edit().putBoolean("hasFirstStarted", true).commit();
+		//}
 	}
 	
 	@Override
@@ -170,7 +186,11 @@ public class ActivityMain extends Activity {
 			+ "/screenshot.png")
 			);
 			intent0.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(Intent.createChooser(intent0, getString(R.string.menu_share) + "...."));
+			try {
+				startActivity(Intent.createChooser(intent0, getString(R.string.menu_share) + "...."));
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 			break;
 		case R.id.item_about:
 			DialogInterface.OnClickListener listener0 = new DialogInterface.OnClickListener() {

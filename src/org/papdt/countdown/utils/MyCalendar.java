@@ -10,6 +10,8 @@ public class MyCalendar {
 	
 	private static Calendar c;
 	
+	private static final String TAG = "MyCalendar";
+	
 	private static void refreshTime(){
 		c = Calendar.getInstance();
 	}
@@ -47,10 +49,41 @@ public class MyCalendar {
 		return l.toString();
 	}
 	
+	public static boolean isLeapYear(int year){  
+        return (year % 4 == 0 & year % 100 != 0) || (year % 400 == 0);  
+    }
+	
+	@SuppressWarnings("deprecation")
+	public static boolean isLastDayOfMonth(Date d){
+		switch (d.getMonth() + 1){
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			return d.getDay() == 31 ? true : false;
+		case 2:
+			return (isLeapYear(d.getYear())) ?
+				((d.getDay() == 29) ? true : false) : ((d.getDay() == 28) ? true :false);
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			return d.getDay() == 30 ? true : false;
+		}
+		return false;
+	}
+	
 	public static String format(String source, boolean isLunar){
 		//TODO 完善农历倒计时机制
 		refreshTime();
+		
+		Log.i(TAG, "源数据:" + source);
+		
 		if (source.length() == 2){
+			Log.i(TAG, "源数据为每月" + source + "日");
 			if (c.get(Calendar.DAY_OF_MONTH) <= Integer.parseInt(source)){
 				return c.get(Calendar.YEAR)
 						+ "-" + (c.get(Calendar.MONTH) + 1)
@@ -69,52 +102,56 @@ public class MyCalendar {
 		}
 		
 		if (source.length() == 5){
-			if ((c.get(Calendar.MONTH) + 1) == Integer.parseInt(source.substring(0, 1))){
+			Log.i(TAG, "源数据为每年" + source);
+			if ((c.get(Calendar.MONTH) + 1) < Integer.parseInt(source.substring(0, 2))){
+				Log.i(TAG, "源数据大于当月,返回今年的" + source);
 				return c.get(Calendar.YEAR) + "-" + source;
 			}
 			
-			if ((c.get(Calendar.MONTH) + 1) == Integer.parseInt(source.substring(0, 1))){
+			if ((c.get(Calendar.MONTH) + 1) == Integer.parseInt(source.substring(0, 2))){
+				Log.i(TAG, "源数据为当月,判断当天是否大于或等于" + source.substring(3, 4));
 				if (c.get(Calendar.DAY_OF_MONTH) <= Integer.parseInt(source.substring(3, 4))){
+					Log.i(TAG, "源数据大于当天,返回今年的" + source);
 					return c.get(Calendar.YEAR) + "-" + source;
 				} else {
+					Log.i(TAG, "源数据小于当天,返回明年的" + source);
 					return (c.get(Calendar.YEAR) + 1) + "-" + source;
 				}
 			}
 			
-			if ((c.get(Calendar.MONTH) + 1) > Integer.parseInt(source.substring(0, 1))){
+			if ((c.get(Calendar.MONTH) + 1) > Integer.parseInt(source.substring(0, 2))){
+				Log.i(TAG, "源数据小于当月,返回明年的" + source);
 				return (c.get(Calendar.YEAR) + 1) + "-" + source;
 			}
 		}
 		
+		Log.i(TAG, "源数据为绝对日期.");
 		return source;
 	}
 	
-	public static long countdown(Date d, int field){
+	@SuppressWarnings("deprecation")
+	public static long countdown(Date d){
 		refreshTime();
 		
 		Date nowdate = c.getTime();
+		Calendar setdate = Calendar.getInstance();
+		setdate.setTime(d);
 		long compare = d.getTime() - nowdate.getTime();
 		
-		switch (field){
-		case Field.DAY:
-			return (Long) compare / 1000 / 3600 / 24 + 1;
-		case Field.MONTH:
-			// TODO 很不科学的返回方法 需要改进
-			return (Long) compare / 1000 / 3600 / 24 / 30;
-		case Field.YEAR:
-			// TODO 也是很不科学- - 我太懒了
-			return (Long) (compare + (c.get(Calendar.YEAR) % 4 == 0 ? 1 : 0)) / 1000 / 3600 / 24 / 30 / 12;
-		case Field.SECOND:
-			return (Long) compare / 1000;
-		case Field.MILESECOND:
-			return (Long) compare;
-		case Field.MINUTE:
-			return (Long) compare / 1000 / 60;
-		case Field.HOUR:
-			return (Long) compare / 1000 / 3600;
+		Log.i(TAG, "");
+		if (nowdate.getYear() == d.getYear()){
+			if (isLastDayOfMonth(nowdate) & d.getDay() == 1 & d.getMonth() - nowdate.getMonth() == 1){
+				return 1;
+			}
+			if (isLastDayOfMonth(d) & nowdate.getDay() == 1 & d.getMonth() - nowdate.getMonth() == -1){
+				return -1;
+			}
+			if (d.getMonth() == nowdate.getMonth()){
+				return setdate.get(Calendar.DAY_OF_MONTH) - c.get(Calendar.DAY_OF_MONTH);
+			}
 		}
+		return Math.round(compare / 1000 / 3600 / 24);
 		
-		return -1;
 	}
 	
 	public class Field{

@@ -56,13 +56,13 @@ public class CountdownCard extends Card {
 		tv_date.setTag(date);
 		
 		TextView tv_countdown = (TextView) view.findViewById(R.id.tv_countdown);
-		tv_countdown.setText(String.valueOf(Math.abs(MyCalendar.countdown(d, MyCalendar.Field.DAY)))+"天");
+		tv_countdown.setText(String.valueOf(Math.abs(MyCalendar.countdown(d)))+"天");
 		
 		TextView tv01 = (TextView) view.findViewById(R.id.TextView01);
-		if (MyCalendar.countdown(d, MyCalendar.Field.DAY) < 0){
+		if (MyCalendar.countdown(d) < 0){
 			tv01.setText("已经过去");
 		}
-		if (MyCalendar.countdown(d, MyCalendar.Field.DAY) == 0){
+		if (MyCalendar.countdown(d) == 0){
 			tv_countdown.setText("");
 			tv01.setText("就在今天~");
 		}

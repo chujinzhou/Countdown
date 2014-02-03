@@ -36,7 +36,7 @@ public class TextCard extends Card {
 			tv_desc.setText(desc);
 		} else {
 			view.findViewById(R.id.line).setVisibility(View.INVISIBLE);
-			view.findViewById(R.id.tv_desc).setVisibility(View.INVISIBLE);
+			view.findViewById(R.id.desc).setVisibility(View.INVISIBLE);
 		}
 		
 		return view;

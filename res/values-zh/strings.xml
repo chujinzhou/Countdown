@@ -32,7 +32,12 @@
         <item>十二月</item>
     </string-array>
     <string name="sharetext">"我正在使用“倒计时”应用by.fython，你也来试一试吧。地址: http://github.com/fython/Countdown"</string>
-    <string name="abouttext">"倒计时 1.0 Beta\n为中国Android用户设计\n\n作者: Fython (fython@163.com)\n新浪微博:@fython\n\n纸飞机工作室出品 2014."</string>
+    <string name="abouttext">"倒计时 1.0 Beta\n为中国Android用户设计\n项目地址：http://github.com/fython/Countdown\n\n作者: Fython (fython@163.com)\n新浪微博:@fython\n\n纸飞机工作室出品 2014."</string>
     
-        
+    <string-array name="tips">
+        <item>清除卡片只需要左右滑动即可! *测试阶段*这三条信息每次都会显示</item>
+        <item>项目地址: http://github.com/fython/Countdown</item>
+        <item>欢迎来吐槽 =。= 有啥BUG截图砸到我头上就行了 联系方式看菜单-关于</item>
+    </string-array>
+            
 </resources>
