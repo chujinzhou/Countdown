@@ -1,11 +1,9 @@
 package org.papdt.countdown.UI;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
 import org.papdt.countdown.R;
-import org.papdt.countdown.services.Alarm;
-import org.papdt.countdown.services.MyAlarmService;
+import org.papdt.countdown.services.AlarmService;
 import org.papdt.countdown.utils.Database;
 import org.papdt.countdown.utils.DatabaseHelper;
 import org.papdt.countdown.utils.MyCalendar;
@@ -18,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -36,9 +33,10 @@ public class ActivityMain extends Activity {
 	private static TextView tv_date, tv_date_chinese;
 	private static CardUI cardui;
 	private static String deleteName, deleteDate;
-
+	
 	private static Database db;
 	
+	private static Context mContext;
 	private AlertDialog dialogAbout;
 	
 	public static Handler mHandler = new Handler(){
@@ -106,6 +104,17 @@ public class ActivityMain extends Activity {
 				msg.what = 0;
 				
 				mHandler.handleMessage(msg);
+
+				String nowStr = MyCalendar.format(db.getDate(i), db.getIsLunar(i));
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.YEAR, Integer.parseInt(nowStr.substring(0, 3)));
+				cal.set(Calendar.MONTH, Integer.parseInt(nowStr.substring(5, 6)));
+				cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nowStr.substring(8, 9)));
+				
+				Intent intent = new Intent(mContext, AlarmService.class);
+		        intent.putExtra("time", String.valueOf(cal.getTimeInMillis()));
+		        intent.putExtra("type", db.getAlarmType(i));
+		        mContext.startService(intent);
 			}
 		}
 	};
@@ -115,30 +124,15 @@ public class ActivityMain extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_main);
-		/*db.add("元旦", "01-01", false);
-		db.add("国庆节", "10-01", false);
-		db.add("我的生日", "10-04", false);
-		db.add("北京奥运会", "2008-08-08", false);
-		db.add("话费月结", "24", false);*/
-
-		db = DatabaseHelper.getDatabase(getApplicationContext());
+		
+		mContext = getApplicationContext();
+		
+		db = DatabaseHelper.getDatabase(mContext);
 		
 		getActionBar().setIcon(getResources().getDrawable(R.drawable.ic_app_white));
 		
 		initDate();
 		initCard();
-		
-		/*int i, j;
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.SECOND, (i = cal.get(Calendar.SECOND)) != 59 ? 0 : i + 1);
-		cal.set(Calendar.MINUTE, (j = cal.get(Calendar.MINUTE)) != 59 ? 0 : j + 1);
-		
-		Alarm alarm = new Alarm(cal, 1);
-		
-		Intent intent = new Intent(this, MyAlarmService.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("alarm", (Parcelable) alarm);
-        startService(intent);*/
 		
 		mHandler.post(refreshThread);
 	}
@@ -161,7 +155,7 @@ public class ActivityMain extends Activity {
 		cardui = (CardUI) findViewById(R.id.cardlist);
 		cardui.setSwipeable(true);
 		
-		SharedPreferences preferences = getApplicationContext().getSharedPreferences("default", Context.MODE_PRIVATE);
+		SharedPreferences preferences = mContext.getSharedPreferences("default", Context.MODE_PRIVATE);
 		//if (!preferences.getBoolean("hasFirstStarted", false)) {
 			String[] tipArray = getResources().getStringArray(R.array.tips);
 			TextCard tip0 = new TextCard(tipArray[0]);

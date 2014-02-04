@@ -100,7 +100,12 @@ public class ActivityAdd extends Activity{
                 public void onClick(DialogInterface dialog, int whichButton) {
                         switch (whichButton) {
                         case DialogInterface.BUTTON_POSITIVE:
-                        	btn_date.setText(cv.getYear()+"-"+(cv.getMonth()+1)+"-"+cv.getDayOfMonth());
+                        	String month = String.valueOf(cv.getMonth() + 1);
+                        	String day = String.valueOf(cv.getDayOfMonth());
+                        	btn_date.setText(cv.getYear()
+                        			+ "-" + (month.length() == 1 ? "0" + month : month)
+                        			+ "-" + (day.length() == 1 ? "0" + day : day)
+                        			);
                         	break;
                         case DialogInterface.BUTTON_NEGATIVE:
                         	dialog_onlyday.cancel();

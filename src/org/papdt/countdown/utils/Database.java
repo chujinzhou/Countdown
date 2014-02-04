@@ -19,6 +19,9 @@ import android.util.Log;
 public class Database {
 	
 	private ArrayList<String> name, date;
+	private ArrayList<Integer> alarmtype;
+	private ArrayList<Boolean> needWeibo;
+	private ArrayList<String> weiboText;
 	private ArrayList<Boolean> isLunar;
 	private Context context;
 	
@@ -45,16 +48,43 @@ public class Database {
 		return isLunar.get(index);
 	}
 	
+	public int getAlarmType(int index){
+		return alarmtype.get(index);
+	}
+	
+	public boolean getIsNeedWeibo(int index){
+		return needWeibo.get(index);
+	}
+	
+	public String getWeiboText(int index){
+		return weiboText.get(index);
+	}
+	
 	public void add(String name, String date, boolean isLunar){
 		this.name.add(name);
 		this.date.add(date);
 		this.isLunar.add(isLunar);
+		this.alarmtype.add(0);
+		this.weiboText.add(null);
+		this.needWeibo.add(false);
 	}
 	
-	public void add(int position, String name, String date, boolean isLunar){
-		this.name.add(position, name);
-		this.date.add(position, date);
-		this.isLunar.add(position, isLunar);
+	public void add(String name, String date, boolean isLunar, int type){
+		this.name.add(name);
+		this.date.add(date);
+		this.isLunar.add(isLunar);
+		this.alarmtype.add(type);
+		this.weiboText.add(null);
+		this.needWeibo.add(false);
+	}
+	
+	public void add(String name, String date, boolean isLunar, int type, String weiboText){
+		this.name.add(name);
+		this.date.add(date);
+		this.isLunar.add(isLunar);
+		this.alarmtype.add(type);
+		this.weiboText.add(weiboText);
+		this.needWeibo.add(true);
 	}
 	
 	public void setName(int position, String name){
@@ -69,16 +99,34 @@ public class Database {
 		this.isLunar.set(position, isLunar);
 	}
 	
+	public void setAlarmType(int position, int type){
+		this.alarmtype.set(position, type);
+	}
+	
+	public void setIsNeedWeibo(int position, boolean b){
+		this.needWeibo.set(position, b);
+	}
+	
+	public void setWeiboText(int position, String weiboText){
+		this.weiboText.set(position, weiboText);
+	}
+	
 	public void delete(int position){
 		this.name.remove(position);
 		this.date.remove(position);
 		this.isLunar.remove(position);
+		this.alarmtype.remove(position);
+		this.needWeibo.remove(position);
+		this.weiboText.remove(position);
 	}
 	
 	public void deleteAll(){
 		name = new ArrayList<String>();
 		date = new ArrayList<String>();
 		isLunar = new ArrayList<Boolean>();
+		alarmtype = new ArrayList<Integer>();
+		needWeibo = new ArrayList<Boolean>();
+		weiboText = new ArrayList<String>();
 	}
 	
 	public void readFromData() {
@@ -115,9 +163,19 @@ public class Database {
 		
 		for (int i = 0;i<jsonArray.length();i++){
 			try {
-				name.add(jsonArray.getJSONObject(i).getString("name"));
-				date.add(jsonArray.getJSONObject(i).getString("date"));
-				isLunar.add(jsonArray.getJSONObject(i).getBoolean("isLunar"));
+				String nameStr = jsonArray.getJSONObject(i).getString("name");
+				String dateStr = jsonArray.getJSONObject(i).getString("date");
+				boolean islunar = jsonArray.getJSONObject(i).getBoolean("isLunar");
+				int alarmtypeid = jsonArray.getJSONObject(i).getInt("alarmtype");
+				boolean needweibo = jsonArray.getJSONObject(i).getBoolean("needWeibo");
+				String weiboStr = jsonArray.getJSONObject(i).getString("weiboText");
+
+				name.add(nameStr);
+				date.add(dateStr);
+				isLunar.add(islunar);
+				alarmtype.add(alarmtypeid);
+				needWeibo.add(needweibo);
+				weiboText.add(weiboStr);
 			} catch (JSONException e) {
 				Log.e(TAG, "第"+i+"组数据格式出现错误");
 				e.printStackTrace();
@@ -139,7 +197,19 @@ public class Database {
 			
 			str.append("\"isLunar\":");
 			str.append(isLunar.get(i));
-			str.append("}");
+			str.append(",");
+			
+			str.append("\"alarmtype\":");
+			str.append(alarmtype.get(i));
+			str.append(",");
+			
+			str.append("\"needWeibo\":");
+			str.append(needWeibo.get(i));
+			str.append(",");
+			
+			str.append("\"weiboText\":\"");
+			str.append(weiboText.get(i));
+			str.append("\"}");
 			if (i<name.size() -1) str.append(",");
 		}
 		str.append("]}");

@@ -9,15 +9,20 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver{
-
-	@SuppressWarnings({ "unused", "deprecation" })
+	
+	private final String TAG = "AlarmReceiver";
+	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onReceive(Context arg0, Intent arg1) {
 		int type = arg1.getIntExtra("type", 0);
 		boolean needSendWeibo = arg1.getBooleanExtra("needSendWeibo", false);
 		String weiboText = arg1.getStringExtra("weibo");
+		Log.i(TAG, "onReceive方法被调用, 获得参数type:" + type + ", needSendWeibo:" + needSendWeibo + ", weiboText:" + weiboText);
+		
 		switch (type){
 		case 0:
 			break;
