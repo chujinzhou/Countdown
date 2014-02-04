@@ -167,7 +167,7 @@ public class ActivityAdd extends Activity{
 						}
 						if (arg2 == 1){
 							String[] dayNum = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"
-									,"19","20","21","22","23","24","25","26","27","28"};
+									,"19","20","21","22","23","24","25","26","27","28","29"};
 							aa = new ArrayAdapter<String>(ActivityAdd.this, android.R.layout.simple_spinner_dropdown_item, dayNum);
 						}
 						s1.setAdapter(aa);

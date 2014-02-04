@@ -1,6 +1,11 @@
 package org.papdt.countdown.UI;
 
+import java.io.Serializable;
+import java.util.Calendar;
+
 import org.papdt.countdown.R;
+import org.papdt.countdown.services.Alarm;
+import org.papdt.countdown.services.MyAlarmService;
 import org.papdt.countdown.utils.Database;
 import org.papdt.countdown.utils.DatabaseHelper;
 import org.papdt.countdown.utils.MyCalendar;
@@ -13,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -121,6 +127,18 @@ public class ActivityMain extends Activity {
 		
 		initDate();
 		initCard();
+		
+		/*int i, j;
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.SECOND, (i = cal.get(Calendar.SECOND)) != 59 ? 0 : i + 1);
+		cal.set(Calendar.MINUTE, (j = cal.get(Calendar.MINUTE)) != 59 ? 0 : j + 1);
+		
+		Alarm alarm = new Alarm(cal, 1);
+		
+		Intent intent = new Intent(this, MyAlarmService.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("alarm", (Parcelable) alarm);
+        startService(intent);*/
 		
 		mHandler.post(refreshThread);
 	}
