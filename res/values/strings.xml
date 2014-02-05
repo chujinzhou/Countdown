@@ -12,10 +12,16 @@
     <string name="hint_title">Title....</string>
     <string name="hint_entertitle">Please enter the title</string>
     <string name="set_date">Set Date</string>
+    <string name="checkbox_weibo">Send weibo on time</string>
     <string-array name="date_type">
         <item>Only that day</item>
         <item>Every Year</item>
         <item>Every Month</item>
+    </string-array>
+    <string-array name="alarm_type">
+        <item>None</item>
+        <item>Only Notify</item>
+        <item>Only Alarm</item>
     </string-array>
     <string-array name="month_name">
         <item>January</item>

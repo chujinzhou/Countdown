@@ -37,10 +37,7 @@ public class AlarmService extends Service{
 		
 		time = Long.parseLong(intent.getStringExtra("time"));
 		type = intent.getIntExtra("type", 0);
-		
-		if (intent.hasExtra("needSendWeibo")){
-			needWeibo = intent.getBooleanExtra("needSendWeibo", false);
-		}
+		needWeibo = intent.getBooleanExtra("needSendWeibo", false);
 		
 		if (intent.hasExtra("weibotext")){
 			weiboText = intent.getStringExtra("weibotext");

@@ -20,6 +20,7 @@ public class Database {
 	
 	private ArrayList<String> name, date;
 	private ArrayList<Integer> alarmtype;
+	private ArrayList<Long> alarmtime;
 	private ArrayList<Boolean> needWeibo;
 	private ArrayList<String> weiboText;
 	private ArrayList<Boolean> isLunar;
@@ -52,6 +53,10 @@ public class Database {
 		return alarmtype.get(index);
 	}
 	
+	public long getAlarmTime(int index){
+		return alarmtime.get(index);
+	}
+	
 	public boolean getIsNeedWeibo(int index){
 		return needWeibo.get(index);
 	}
@@ -65,6 +70,7 @@ public class Database {
 		this.date.add(date);
 		this.isLunar.add(isLunar);
 		this.alarmtype.add(0);
+		this.alarmtime.add(0L);
 		this.weiboText.add(null);
 		this.needWeibo.add(false);
 	}
@@ -74,6 +80,7 @@ public class Database {
 		this.date.add(date);
 		this.isLunar.add(isLunar);
 		this.alarmtype.add(type);
+		this.alarmtime.add(0L);
 		this.weiboText.add(null);
 		this.needWeibo.add(false);
 	}
@@ -83,6 +90,7 @@ public class Database {
 		this.date.add(date);
 		this.isLunar.add(isLunar);
 		this.alarmtype.add(type);
+		this.alarmtime.add(0L);
 		this.weiboText.add(weiboText);
 		this.needWeibo.add(true);
 	}
@@ -103,6 +111,10 @@ public class Database {
 		this.alarmtype.set(position, type);
 	}
 	
+	public void setAlarmTime(int position, long time){
+		this.alarmtime.set(position, time);
+	}
+	
 	public void setIsNeedWeibo(int position, boolean b){
 		this.needWeibo.set(position, b);
 	}
@@ -116,6 +128,7 @@ public class Database {
 		this.date.remove(position);
 		this.isLunar.remove(position);
 		this.alarmtype.remove(position);
+		this.alarmtime.remove(position);
 		this.needWeibo.remove(position);
 		this.weiboText.remove(position);
 	}
@@ -125,6 +138,7 @@ public class Database {
 		date = new ArrayList<String>();
 		isLunar = new ArrayList<Boolean>();
 		alarmtype = new ArrayList<Integer>();
+		alarmtime = new ArrayList<Long>();
 		needWeibo = new ArrayList<Boolean>();
 		weiboText = new ArrayList<String>();
 	}
@@ -167,12 +181,14 @@ public class Database {
 				String dateStr = jsonArray.getJSONObject(i).getString("date");
 				boolean islunar = jsonArray.getJSONObject(i).getBoolean("isLunar");
 				int alarmtypeid = jsonArray.getJSONObject(i).getInt("alarmtype");
+				long alarmtime_ = jsonArray.getJSONObject(i).getLong("alarmtime");
 				boolean needweibo = jsonArray.getJSONObject(i).getBoolean("needWeibo");
 				String weiboStr = jsonArray.getJSONObject(i).getString("weiboText");
 
 				name.add(nameStr);
 				date.add(dateStr);
 				isLunar.add(islunar);
+				alarmtime.add(alarmtime_);
 				alarmtype.add(alarmtypeid);
 				needWeibo.add(needweibo);
 				weiboText.add(weiboStr);
@@ -201,6 +217,10 @@ public class Database {
 			
 			str.append("\"alarmtype\":");
 			str.append(alarmtype.get(i));
+			str.append(",");
+			
+			str.append("\"alarmtime\":");
+			str.append(alarmtime.get(i));
 			str.append(",");
 			
 			str.append("\"needWeibo\":");

@@ -1,5 +1,6 @@
 package org.papdt.countdown.UI;
 
+import java.sql.Date;
 import java.util.Calendar;
 
 import org.papdt.countdown.R;
@@ -38,6 +39,8 @@ public class ActivityMain extends Activity {
 	
 	private static Context mContext;
 	private AlertDialog dialogAbout;
+	
+	private final static String TAG = "ActivityMain";
 	
 	public static Handler mHandler = new Handler(){
 		@Override
@@ -107,13 +110,18 @@ public class ActivityMain extends Activity {
 
 				String nowStr = MyCalendar.format(db.getDate(i), db.getIsLunar(i));
 				Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.YEAR, Integer.parseInt(nowStr.substring(0, 3)));
-				cal.set(Calendar.MONTH, Integer.parseInt(nowStr.substring(5, 6)));
-				cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nowStr.substring(8, 9)));
+				@SuppressWarnings("deprecation")
+				Date d = new Date(Integer.parseInt(nowStr.substring(0, 3)), Integer.parseInt(nowStr.substring(5, 6))
+						,Integer.parseInt(nowStr.substring(8, 9)));
+				cal.setTime(d);
+				
+				Log.i(TAG, "通知时间定为:" + String.valueOf(cal.getTimeInMillis() + db.getAlarmTime(i)));
 				
 				Intent intent = new Intent(mContext, AlarmService.class);
-		        intent.putExtra("time", String.valueOf(cal.getTimeInMillis()));
+		        intent.putExtra("time", String.valueOf(cal.getTimeInMillis() + db.getAlarmTime(i)));
 		        intent.putExtra("type", db.getAlarmType(i));
+		        //intent.putExtra("needSendWeibo", db.getIsNeedWeibo(i));
+		        //intent.putExtra("weibotext", db.getWeiboText(i));
 		        mContext.startService(intent);
 			}
 		}

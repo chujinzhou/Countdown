@@ -19,22 +19,28 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class ActivityAdd extends Activity{
 	
-	private EditText et_title;
-	private Spinner mSpinner;
-	private Button btn_date;
+	private EditText et_title, et_weibo;
+	private Spinner mSpinner, spinnerAlarm;
+	private Button btn_date, btn_time;
+	private CheckBox cb_weibo;
 	
 	private static Database db;
-	private AlertDialog dialog_onlyday, dialog_everymonth, dialog_everyyear;
+	private AlertDialog dialog_onlyday, dialog_everymonth, dialog_everyyear, dialog_time;
 	
 	private DatePicker cv;
 	private Spinner s0, s1, s2;
+	private TimePicker tp;
 	
 	@Override
 	public void onCreate(Bundle bundle){
@@ -48,12 +54,17 @@ public class ActivityAdd extends Activity{
 		db = DatabaseHelper.getDatabase(getApplicationContext());
 		
 		et_title = (EditText) findViewById(R.id.et_title);
+		et_weibo = (EditText) findViewById(R.id.et_weibo);
 		mSpinner = (Spinner) findViewById(R.id.spinner1);
+		spinnerAlarm = (Spinner) findViewById(R.id.spinner2);
 		btn_date = (Button) findViewById(R.id.btn_date);
+		btn_time = (Button) findViewById(R.id.btn_time);
+		cb_weibo = (CheckBox) findViewById(R.id.cb_weibo);
 		
-		String[] spinnerText = getResources().getStringArray(R.array.date_type);
-		ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerText);
-		mSpinner.setAdapter(mArrayAdapter);
+		String[] spinnerText0 = getResources().getStringArray(R.array.date_type);
+		String[] spinnerText1 = getResources().getStringArray(R.array.alarm_type);
+		ArrayAdapter<String> mArrayAdapter0 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerText0);
+		mSpinner.setAdapter(mArrayAdapter0);
 		mSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 			@Override
@@ -80,12 +91,54 @@ public class ActivityAdd extends Activity{
 			
 		});
 		
+		ArrayAdapter<String> mArrayAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerText1);
+		spinnerAlarm.setAdapter(mArrayAdapter1);
+		spinnerAlarm.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				switch (arg2){
+				case 0:
+					btn_time.setVisibility(Button.INVISIBLE);
+					break;
+				case 1:
+				case 2:
+					btn_time.setVisibility(Button.VISIBLE);
+					break;
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		btn_date.setText(MyCalendar.format("01-01", false));
 		btn_date.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View arg0) {
 				showSetDialog((int) mSpinner.getSelectedItemId());
+			}
+			
+		});
+		
+		btn_time.setOnClickListener(new OnClickListener(){
+			
+			@Override
+			public void onClick(View arg0) {
+				showSetDialog(3);
+			}
+		});
+		
+		cb_weibo.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				et_weibo.setVisibility(arg1 ? EditText.VISIBLE : EditText.INVISIBLE);
 			}
 			
 		});
@@ -229,6 +282,33 @@ public class ActivityAdd extends Activity{
 				.show();
 			} else dialog_everymonth.show();
 			break;
+		case 3:
+			DialogInterface.OnClickListener listener3 = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int whichButton) {
+                        switch (whichButton) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                        	btn_time.setText(tp.getCurrentHour() + ":" + tp.getCurrentMinute());
+                        	break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                        	dialog_time.cancel();
+                        	break;
+                        }
+                }
+            };
+			if (dialog_time == null){
+				LayoutInflater inflater = getLayoutInflater();
+				View layout = inflater.inflate(R.layout.popup_time, null);
+				tp = (TimePicker) layout.findViewById(R.id.timePicker1);
+
+				dialog_time = new AlertDialog.Builder(this)
+				.setTitle(getString(R.string.set_date))
+				.setView(layout)
+				.setPositiveButton(android.R.string.ok, listener3)
+				.setNegativeButton(android.R.string.cancel, listener3)
+				.show();
+			} else dialog_time.show();
+			break;
 		}
 	}
 	
@@ -250,7 +330,18 @@ public class ActivityAdd extends Activity{
 				break;
 			}
 			
-			db.add(et_title.getText().toString(), btn_date.getText().toString(), false);
+			if (cb_weibo.isChecked()) {
+				db.add(et_title.getText().toString(), btn_date.getText().toString(), false, spinnerAlarm.getSelectedItemPosition(), et_weibo.getText().toString());
+				Long hour = Long.parseLong(btn_time.getText().toString().substring(0, 1)),
+						min = Long.parseLong(btn_time.getText().toString().substring(3, 4));
+				db.setAlarmTime(db.getSize() - 1, hour * 3600 * 1000 + min * 60 * 1000);
+			} else {
+				db.add(et_title.getText().toString(), btn_date.getText().toString(), false, spinnerAlarm.getSelectedItemPosition());
+				Long hour = Long.parseLong(btn_time.getText().toString().substring(0, 1)),
+					min = Long.parseLong(btn_time.getText().toString().substring(3, 4));
+				db.setAlarmTime(db.getSize() - 1, hour * 3600 * 1000 + min * 60 * 1000);
+			}
+			
 			DatabaseHelper.setDatabase(db);
 			ActivityMain.mHandler.sendEmptyMessage(3);
 			Toast.makeText(getApplicationContext(), getString(R.string.toast_add), Toast.LENGTH_SHORT).show();
